@@ -1,4 +1,4 @@
-package com.team2568.drivetrain;
+package com.team2568.drive;
 
 /**
  * DriveTrain interface abstracts the differences between different mechanical
@@ -7,5 +7,4 @@ package com.team2568.drivetrain;
  * @author Ryan Chaiyakul
  */
 public interface DriveTrain {
-
 }
