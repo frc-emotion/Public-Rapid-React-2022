@@ -6,13 +6,14 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup; //SpeedController has been depricated, a new change for 2022. I'll use the new method.
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.GenericHID;
 
 public class DriveTrain {
      final private CANSparkMax lbMotor, lmMotor, lfMotor; //Left Back, Left Middle, Left Front.
      final private CANSparkMax rbMotor, rmMotor, rfMotor; //Right Back, Right Middle, Right Front
      final private MotorControllerGroup leftMotors, rightMotors;
-     final private DifferentialDrive dDrive = new DifferentialDrive(leftMotors, rightMotors);
+     private double power = 0.7;
+     private double exponent = 1.8;   //making these instance variables incase you ever want to change the accelCurve
+     private DifferentialDrive dDrive;
 
      //TODO make a constants class, i'm not willing to do that now tho.
 
@@ -35,21 +36,33 @@ public class DriveTrain {
                 index.setSecondaryCurrentLimit(45);
                 index.setIdleMode(IdleMode.kBrake);
             }
-        
+       
     }
 
     public void run(){ 
-        double rAxis = Robot.driverController.getY(Hand.kRight);
-        double lAxis = Robot.driverController.getY(Hand.kLeft);
-        dDrive.tankDrive(lSpeed, rSpeed);
-        
+        dDrive = new DifferentialDrive(leftMotors, rightMotors);
+            double rAxis = Robot.driverController.getRightY(); //Hand is depricated, it's all within generic HID now
+            double lAxis = Robot.driverController.getLeftY();  
+        //Above is just raw input
+        //below is the input -> an Acceleration Curve
+        if(rAxis < 0){
+            double rSpeed = -1 * power*(Math.pow(lAxis,exponent));
+            double lSpeed = -1 * power *(Math.pow(rAxis,exponent));
+            dDrive.tankDrive(lSpeed, rSpeed);
+        }else{
+             double rSpeed = power*(Math.pow(lAxis,exponent));
+             double lSpeed = power *(Math.pow(rAxis,exponent));           
+            dDrive.tankDrive(lSpeed, rSpeed);
+        }
     }
     public void swerveDrive(){
         //TODO Liam will write swerveDrive when he has the time
     }
 
-    public void closeMotors(){ //vscode tells me there is a resource leak, so this should fix it?
+    public void close(){ //vscode tells me there is a resource leak, so this should fix it?
+        dDrive.close();
         leftMotors.close();
         rightMotors.close();
+        
     }
 }

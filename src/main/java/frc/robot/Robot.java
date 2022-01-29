@@ -1,10 +1,10 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-
+public static XboxController driverController;
+public static DriveTrain drivetrain;
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -24,6 +25,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    driverController = new XboxController(0);    //instantiating the Driver's Controller, we always use Port 0 for this.
+    drivetrain       = new DriveTrain();         //all I have right now is a null constructor.
+
   }
 
   /**
