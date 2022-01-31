@@ -16,8 +16,10 @@ import edu.wpi.first.wpilibj.XboxController;
  * project.
  */
 public class Robot extends TimedRobot {
-public static XboxController driverController;
-public static DriveTrain drivetrain;
+  public static XboxController driverController;
+  public static XboxController operatorController;
+  public static DriveTrain drivetrain;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -25,8 +27,10 @@ public static DriveTrain drivetrain;
    */
   @Override
   public void robotInit() {
-    driverController = new XboxController(0);    //instantiating the Driver's Controller, we always use Port 0 for this.
-    drivetrain       = new DriveTrain();         //all I have right now is a null constructor.
+    driverController = new XboxController(Constants.DRIVER_PORT); // instantiating the Driver's Controller, we always
+
+    operatorController = new XboxController(Constants.OPERATOR_PORT);
+    drivetrain = new DriveTrain();
 
   }
 
@@ -74,11 +78,13 @@ public static DriveTrain drivetrain;
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    drivetrain.run();
   }
 
   /** This function is called once when the robot is disabled. */
